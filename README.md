@@ -20,4 +20,6 @@ Each Vertex and Edge in the graph is stored as individual JSON document with a s
 * Run the application with mvn spring-boot:run 
 * A Graph and a Lease container will be created in the corrosponding accounts
 * Add a Vertex from azure portal using the following gremlin query, you will see the correspoding JSON documnet read and logge by the application
+  ```
   g.addV('person').property('firstName', 'Thomas').property('lastName', 'Andersen').property('partitionkey', 'pk')
+  ```
