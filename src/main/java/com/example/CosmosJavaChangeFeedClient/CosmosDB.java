@@ -26,6 +26,8 @@ import java.util.Map;
 @Service
 public class CosmosDB {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final String FEED_CONTAINER ="FEED_CONTAINER";
+    private static final String LEASE_CONTAINER ="LEASE_CONTAINER";
 
     private Map<String, CosmosAsyncContainer> containerNameToContainer = new HashMap<>();;
     private CosmosAsyncClient client;
@@ -59,9 +61,9 @@ public class CosmosDB {
 
     private void cosmosSetup() {
                 CosmosAsyncContainer gremlinCosmosAsyncContainer = cosmosCreateResources( gremlinDataSourceProperties.getContainer());
-                containerNameToContainer.put("FEED_CONTAINER", gremlinCosmosAsyncContainer);
+                containerNameToContainer.put(FEED_CONTAINER, gremlinCosmosAsyncContainer);
                 CosmosAsyncContainer sqlCosmosAsyncContainer = cosmosCreateResources( sqlDataSourceProperties.getContainer());
-                containerNameToContainer.put("LEASE_CONTAINER", sqlCosmosAsyncContainer);
+                containerNameToContainer.put(LEASE_CONTAINER, sqlCosmosAsyncContainer);
     }
 
     private CosmosAsyncContainer cosmosCreateResources(String containerName) {
@@ -112,14 +114,14 @@ public class CosmosDB {
 
 
     public void startChangeFeedClient() {
-        com.azure.cosmos.ChangeFeedProcessor changeFeedProcessorInstance = getChangeFeedProcessor("GraphHost_1", getContainer("FEED_CONTAINER"), getContainer("LEASE_CONTAINER"));
+        com.azure.cosmos.ChangeFeedProcessor changeFeedProcessorInstance = getChangeFeedProcessor("GraphHost_1", getContainer(FEED_CONTAINER), getContainer(LEASE_CONTAINER));
         changeFeedProcessorInstance
                 .start()
                 .subscribeOn(Schedulers.elastic())
                 .subscribe();
     }
 
-    
+
     public ChangeFeedProcessor getChangeFeedProcessor(String hostName, CosmosAsyncContainer feedContainer, CosmosAsyncContainer leaseContainer) {
         ChangeFeedProcessorOptions changeFeedOptions = new ChangeFeedProcessorOptions();
         changeFeedOptions.setFeedPollDelay(Duration.ofSeconds(20));
