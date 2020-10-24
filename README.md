@@ -7,6 +7,7 @@ When you read the change feed you will see JSON document which will look like a 
 
 Each Vertex and Edge in the graph is stored as individual JSON document with a specific format. Every time a Vertex or an Edge is inserted or updated the corresponding JSON document shows up in the change feed. 
 
+More Details in the [Blog](https://www.ravitella.com/gremlincf/)
 
 # Instructions
 
